@@ -12,12 +12,11 @@
 <body>
 <main>
     <h2>Objednáno</h2>
-    <h3>${name} pojede na tábor:</h3>
-    <h3>Vybraný turnus: ${turnus}</h3>
+    <h3>${formData.jmeno} pojede na tábor:</h3>
+    <h3>Vybraný turnus: ${formData.turnus}</h3>
     <h3>Kód objednávky: ${kod}</h3>
     <h3>Kontaktní email, kam Vám přijdou podrobnosti o táboru:</h3>
-    <h3>${email}</h3>
-    <h3>${vek}</h3>
+    <h3>${formData.email}</h3>
 </main>
 </body>
 </html>

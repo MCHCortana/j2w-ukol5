@@ -1,9 +1,11 @@
 package cz.czechitas.java2webapps.ukol5.registration;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.ValidationException;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
-import java.time.Period;
 
 public class RegistrationForm {
     @NotBlank(message = "Prosím vyplňte jméno")
@@ -19,9 +21,8 @@ public class RegistrationForm {
     @Email
     private String email;
     private String telefon;
-    @Min(5)
-    @Max(12)
-    private int vek;
+
+
 
     public String getJmeno() {
         return jmeno;
@@ -45,7 +46,6 @@ public class RegistrationForm {
 
     public void setDatumNarozeni(LocalDate datumNarozeni) {
         this.datumNarozeni = datumNarozeni;
-        setVek();
     }
 
     public Pohlavi getPohlavi() {
@@ -80,11 +80,12 @@ public class RegistrationForm {
         this.telefon = telefon;
     }
 
-    public int getVek() {
-        return vek;
-    }
-
-    public void setVek() {
-        this.vek = Period.between(this.datumNarozeni, LocalDate.now()).getYears();
+    public void getVek() {
+        if (datumNarozeni != null) {
+            int vek = datumNarozeni.until(LocalDate.now()).getYears();
+            if (vek < 5 || vek > 12) {
+                throw new ValidationException("Vaše dítko je moc malé nebo staré. Našim táborníkům musí být mezi 5 a 12lety");
+            }
+        }
     }
 }

@@ -1,8 +1,10 @@
 package cz.czechitas.java2webapps.ukol5.registration;
 
 import jakarta.validation.Valid;
+import jakarta.validation.ValidationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,14 +30,20 @@ public class RegistraceController {
     @PostMapping("/")
     public Object formular(@Valid @ModelAttribute("form") RegistrationForm form, BindingResult bindingResult) {
 
+        try {
+            form.getVek();
+        } catch (ValidationException e) {
+            bindingResult.addError(new FieldError("e", "datumNarozeni", e.getMessage()));
+        }
+
         if (bindingResult.hasErrors()) {
             return "/formular";
         }
+        int kodObjednavky = Math.abs(random.nextInt(100000));
+
         return new ModelAndView("/objednano")
-                .addObject("kod", Math.abs(random.nextInt()))
-                .addObject("email", form.getEmail())
-                .addObject("name", form.getJmeno())
-                .addObject("turnus", form.getTurnus());
+                .addObject("kod", kodObjednavky)
+                .addObject("formData", form);
     }
 
 }
